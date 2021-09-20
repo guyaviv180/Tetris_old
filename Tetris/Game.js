@@ -3,8 +3,9 @@ var leftArrow = false;
 var upArrow = false;
 var downArrow = false;
 var length = 25;
-var arr = [new I, new T];
+var arr = [new I, new T, new J, new L, new S, new Z, new O];
 var current = 0;
+var piece = arr[current];
 var stop = false;
 
 window.onload = function () {
@@ -12,32 +13,46 @@ window.onload = function () {
     context = canvas.getContext("2d");
     setInterval(function () {
         draw();
-        dropPiece(arr[current]);
+        dropPiece(piece);
+        checkStop(piece);
+        if (stop == true) {
+            getPiece();
+        }
     }, 500)
     addEventListener("keydown", onKeyDown);
 }
 
-function getPiece(arr) {
-    piece = arr[current + 1];
+function getPiece() {
+    current += 1;
+    piece = arr[current];
+    stop = false;
 }
 
-function dropPiece(p) {
-    if (piece.Block[3].y < (500 - length)) {
-
-    }
+function dropPiece(piece) {
     for (var i = 0; i < 4; i++) {
-        p.Block[i].y += length;
+        piece.Block[i].y += length;
     }
 }
-
+function checkStop(piece) {
+    if (piece.Block[3].y == (500 - length)) {
+        stop = true;
+    }
+    for (var i = 0; i < current; i++) {
+        if (piece.isTouching(arr[i])) {
+            stop = true;
+        }
+    }
+}
 function draw() {
     drawBoard();
-    drawPiece()
+    drawPieces()
 }
 
-function drawPiece() {
-    for (var i = 0; i < 4; i++) {
-        drawRectangle(piece.Block[i].x, piece.Block[i].y, length, length, piece.color);
+function drawPieces() {
+    for (var i = 0; i < (current + 1); i++) {
+        for (var j = 0; j < 4; j++) {
+            drawRectangle(arr[i].Block[j].x, arr[i].Block[j].y, length, length, arr[i].color);
+        }
     }
 }
 
