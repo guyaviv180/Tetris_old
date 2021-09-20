@@ -28,6 +28,34 @@ function getPiece() {
     stop = false;
 }
 
+function movePiece(direction) {
+    var canMove = true
+    if (direction == "right") {
+        for (var i = 0; i < 4; i++) {
+            if (piece.Block[i].x >= (250 - length)) {
+                canMove = false
+            }
+        }
+        if (canMove == true) {
+            for (var i = 0; i < 4; i++) {
+                piece.Block[i].x += length;
+            }
+        }
+    }
+    if (direction == "left") {
+        for (var i = 0; i < 4; i++) {
+            if (piece.Block[i].x < (0 + length)) {
+                canMove = false
+            }
+        }
+        if (canMove == true) {
+            for (var i = 0; i < 4; i++) {
+                piece.Block[i].x -= length;
+            }
+        }
+    }
+}
+
 function dropPiece(piece) {
     for (var i = 0; i < 4; i++) {
         piece.Block[i].y += length;
@@ -70,10 +98,10 @@ function onKeyDown(event) {
     var keyCode = event.keyCode;
     switch (keyCode) {
         case 39:
-            rightArrow = true;
+            movePiece("right");
             break;
         case 37:
-            leftArrow = true;
+            movePiece("left");
             break;
         case 38:
             upArrow = true;
