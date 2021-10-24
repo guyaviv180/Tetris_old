@@ -2,29 +2,75 @@
 var leftArrow = false;
 var upArrow = false;
 var downArrow = false;
-var length = 25;
-var arr = [new I, new T, new J, new L, new S, new Z, new O];
-var current = 0;
-var piece = arr[current];
+const length = 25;
+var piece;
+var arr = [];
+var field = [
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+];
 var stop = false;
 
 window.onload = function () {
     canvas = document.getElementById("myCanvas");
     context = canvas.getContext("2d");
+    getPiece();
     setInterval(function () {
         draw();
         dropPiece(piece);
         checkStop(piece);
-        if (stop == true) {
-            getPiece();
-        }
-    }, 500)
+        if (stop) { changeField(); getPiece(); }
+
+    }, 1000)
     addEventListener("keydown", onKeyDown);
 }
 
+function changeField() {
+    if (stop) {
+        for (var i = 0; i < 4; i++) {
+            indexX = (piece.Block[i].x / length);
+            indexY = (piece.Block[i].y / length);
+            field[indexY][indexX] = 1;
+        }
+    }
+}
+
+function checkStop(piece) {
+    if (piece.Block[3].y == (500 - length)) {
+        stop = true;
+    }
+    else {
+        for (var i = 0; i < 4; i++) {
+            yUnder = ((piece.Block[i].y + 25) / 25)
+            xUnder = ((piece.Block[i].x) / 25)
+            if (field[yUnder][xUnder] == 1) {
+                stop = true;
+            }
+        }
+    }
+}
+
 function getPiece() {
-    current += 1;
-    piece = arr[current];
+    piece = getRandom();
+    arr[arr.length] = piece;
     stop = false;
 }
 
@@ -54,6 +100,18 @@ function movePiece(direction) {
             }
         }
     }
+    if (direction == "down") {
+        for (var i = 0; i < 4; i++) {
+            if (piece.Block[i].y >= (length * 20)) {
+                canMove = false
+            }
+        }
+        if (canMove == true) {
+            for (var i = 0; i < 4; i++) {
+                piece.Block[i].y += length;
+            }
+        }
+    }
 }
 
 function dropPiece(piece) {
@@ -61,23 +119,14 @@ function dropPiece(piece) {
         piece.Block[i].y += length;
     }
 }
-function checkStop(piece) {
-    if (piece.Block[3].y == (500 - length)) {
-        stop = true;
-    }
-    for (var i = 0; i < current; i++) {
-        if (piece.isTouching(arr[i])) {
-            stop = true;
-        }
-    }
-}
+
 function draw() {
     drawBoard();
     drawPieces()
 }
 
 function drawPieces() {
-    for (var i = 0; i < (current + 1); i++) {
+    for (var i = 0; i < (arr.length); i++) {
         for (var j = 0; j < 4; j++) {
             drawRectangle(arr[i].Block[j].x, arr[i].Block[j].y, length, length, arr[i].color);
         }
@@ -94,6 +143,25 @@ function drawBoard() {
     }
 }
 
+function getRandom() {
+    switch (getRandomNumber(1, 7)) {
+        case 1:
+            return new I;
+        case 2:
+            return new T;
+        case 3:
+            return new J;
+        case 4:
+            return new L;
+        case 5:
+            return new S;
+        case 6:
+            return new Z;
+        case 7:
+            return new O;
+    }
+}
+
 function onKeyDown(event) {
     var keyCode = event.keyCode;
     switch (keyCode) {
@@ -107,7 +175,7 @@ function onKeyDown(event) {
             upArrow = true;
             break;
         case 40:
-            downArrow = true;
+            movePiece("down");
             break;
     }
 }

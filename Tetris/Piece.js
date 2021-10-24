@@ -10,16 +10,6 @@ class Piece {
         this.Block = new Block(4)
         this.color = color;
     }
-
-    isTouching(piece) {
-        for (var i = 0; i < 4; i++) {
-            for (var j = 0; j < 4; j++) {
-                if (this.Block[i].y + length == piece.Block[j].y && this.Block[i].x == piece.Block[j].x) {
-                    return true
-                }
-            }
-        }
-    }
 }
 
 class I extends Piece {
