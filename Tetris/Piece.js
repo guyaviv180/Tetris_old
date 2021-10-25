@@ -6,15 +6,16 @@
     }
 }
 class Piece {
-    constructor(color) {
+    constructor(color, index) {
         this.Block = new Block(4)
         this.color = color;
+        this.index = index;
     }
 }
 
 class I extends Piece {
     constructor() {
-        super("cyan");
+        super("cyan", 1);
         this.Block[0] = new Block(length * 3, length * 0)
         this.Block[1] = new Block(length * 4, length * 0)
         this.Block[2] = new Block(length * 5, length * 0)
@@ -23,7 +24,7 @@ class I extends Piece {
 }
 class T extends Piece {
     constructor() {
-        super("purple");
+        super("purple", 2);
         this.Block[0] = new Block(length * 4, length * 0)
         this.Block[1] = new Block(length * 3, length * 1)
         this.Block[2] = new Block(length * 4, length * 1)
@@ -32,7 +33,7 @@ class T extends Piece {
 }
 class J extends Piece {
     constructor() {
-        super("blue");
+        super("blue", 3);
         this.Block[0] = new Block(length * 3, length * 0)
         this.Block[1] = new Block(length * 3, length * 1)
         this.Block[2] = new Block(length * 4, length * 1)
@@ -41,7 +42,7 @@ class J extends Piece {
 }
 class L extends Piece {
     constructor() {
-        super("orange");
+        super("orange", 4);
         this.Block[0] = new Block(length * 5, length * 0)
         this.Block[1] = new Block(length * 3, length * 1)
         this.Block[2] = new Block(length * 4, length * 1)
@@ -50,7 +51,7 @@ class L extends Piece {
 }
 class S extends Piece {
     constructor() {
-        super("lime");
+        super("lime", 5);
         this.Block[0] = new Block(length * 4, length * 0)
         this.Block[1] = new Block(length * 5, length * 0)
         this.Block[2] = new Block(length * 4, length * 1)
@@ -59,7 +60,7 @@ class S extends Piece {
 }
 class Z extends Piece {
     constructor() {
-        super("red");
+        super("red", 6);
         this.Block[0] = new Block(length * 3, length * 0)
         this.Block[1] = new Block(length * 4, length * 0)
         this.Block[2] = new Block(length * 4, length * 1)
@@ -68,7 +69,7 @@ class Z extends Piece {
 }
 class O extends Piece {
     constructor() {
-        super("yellow");
+        super("yellow", 7);
         this.Block[0] = new Block(length * 4, length * 0)
         this.Block[1] = new Block(length * 5, length * 0)
         this.Block[2] = new Block(length * 4, length * 1)

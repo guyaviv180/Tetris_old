@@ -4,7 +4,6 @@ var upArrow = false;
 var downArrow = false;
 const length = 25;
 var piece;
-var arr = [];
 var field = [
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -33,14 +32,14 @@ window.onload = function () {
     canvas = document.getElementById("myCanvas");
     context = canvas.getContext("2d");
     getPiece();
-    setInterval(function () {
-        draw();
-        dropPiece(piece);
-        checkStop(piece);
-        if (stop) { changeField(); getPiece(); }
-
-    }, 1000)
+    setInterval(function () { update(); }, 1000)
     addEventListener("keydown", onKeyDown);
+}
+function update() {
+    draw();
+    dropPiece(piece);
+    checkStop(piece);
+    if (stop) { changeField(); getPiece(); }
 }
 
 function changeField() {
@@ -48,7 +47,7 @@ function changeField() {
         for (var i = 0; i < 4; i++) {
             indexX = (piece.Block[i].x / length);
             indexY = (piece.Block[i].y / length);
-            field[indexY][indexX] = 1;
+            field[indexY][indexX] = piece.index;
         }
     }
 }
@@ -61,7 +60,7 @@ function checkStop(piece) {
         for (var i = 0; i < 4; i++) {
             yUnder = ((piece.Block[i].y + 25) / 25)
             xUnder = ((piece.Block[i].x) / 25)
-            if (field[yUnder][xUnder] == 1) {
+            if (field[yUnder][xUnder] >  0) {
                 stop = true;
             }
         }
@@ -70,7 +69,6 @@ function checkStop(piece) {
 
 function getPiece() {
     piece = getRandom();
-    arr[arr.length] = piece;
     stop = false;
 }
 
@@ -126,20 +124,45 @@ function draw() {
 }
 
 function drawPieces() {
-    for (var i = 0; i < (arr.length); i++) {
-        for (var j = 0; j < 4; j++) {
-            drawRectangle(arr[i].Block[j].x, arr[i].Block[j].y, length, length, arr[i].color);
+    for (var i = 0; i < 20; i++) {
+        for (var j = 0; j < 10; j++) {
+            c = getColor(field[i][j]);
+            drawRectangle(j * length, i * length, length, length, c, 1, "black");
         }
+    }
+    for (var t = 0; t < 4; t++) {
+        drawRectangle(piece.Block[t].x, piece.Block[t].y, length, length, piece.color, 1, "black");
+    }
+}
+
+function getColor(num){
+    switch (num) {
+        case 0:
+            return "white"
+        case 1:
+            return "cyan"
+        case 2:
+            return "purple"
+        case 3:
+            return "blue"
+        case 4:
+            return "orange"
+        case 5:
+            return "lime"
+        case 6:
+            return "red"
+        case 7:
+            return "yellow"
     }
 }
 
 function drawBoard() {
-    drawRectangle(0, 0, 250, 500, "white", 0, "");
+    drawRectangle(0, 0, 250, 500, "white", 0, "", 1, "black");
     for (var i = 1; i < 10; i++) {
-        drawLine((length * i), 0, (length * i), (length * 20), 1, "grey");
+        drawLine((length * i), 0, (length * i), (length * 20), 0, "grey");
     }
     for (var i = 1; i < 20; i++) {
-        drawLine(0, (length * i), (length * 10), (length * i), 1, "grey");
+        drawLine(0, (length * i), (length * 10), (length * i), 0, "grey");
     }
 }
 

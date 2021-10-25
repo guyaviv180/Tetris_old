@@ -6,6 +6,8 @@ function drawRectangle(x, y, width, height, color, borderWidth, borderColor) {
     context.lineWidth = borderWidth;
     context.strokeStyle = borderColor;
     context.stroke();
+    context.strokeStyle = "black"
+    context.lineWidth = 1;
 }
 
 function drawArc(x, y, r, startAngle, endAngle, counterClockWise, color, borderWidth, borderColor) {
