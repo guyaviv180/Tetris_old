@@ -27,19 +27,46 @@ var field = [
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 ];
 var stop = false;
+var arr = [1, 1, 2, 5, 7, 2, 3, 4];
+var count = 0;
 
 window.onload = function () {
     canvas = document.getElementById("myCanvas");
     context = canvas.getContext("2d");
     getPiece();
+    draw();
     setInterval(function () { update(); }, 1000)
     addEventListener("keydown", onKeyDown);
 }
 function update() {
-    draw();
     dropPiece(piece);
     checkStop(piece);
-    if (stop) { changeField(); getPiece(); }
+    draw();
+    if (stop) { count++; changeField(); checkClear(); getPiece(); draw();}
+}
+
+function checkClear() {
+    var full = true;
+    for (var i = 0; i < 20; i++) {
+        full = true;
+        for (var j = 0; j < 10; j++) {
+            if (field[i][j] == 0) {
+                full = false;
+            }
+        }
+        if (full) { clearLine(i); }
+    }
+}
+
+function clearLine(line) {
+    for (var t = 0; t < 10; t++) {
+        field[line][t] = 0;
+    }
+    for (var i = line; i > 0; i--) {
+        for (var j = 0; j < 10; j++) {
+            field[i][j] = field[i - 1][j];
+        }
+    }
 }
 
 function changeField() {
@@ -110,6 +137,7 @@ function movePiece(direction) {
             }
         }
     }
+    draw();
 }
 
 function dropPiece(piece) {
@@ -127,7 +155,7 @@ function drawPieces() {
     for (var i = 0; i < 20; i++) {
         for (var j = 0; j < 10; j++) {
             c = getColor(field[i][j]);
-            drawRectangle(j * length, i * length, length, length, c, 1, "black");
+            drawRectangle(j * length, i * length, length, length, c, 0.5, "grey");
         }
     }
     for (var t = 0; t < 4; t++) {
@@ -135,7 +163,37 @@ function drawPieces() {
     }
 }
 
-function getColor(num){
+function drawBoard() {
+    drawRectangle(0, 0, 250, 500, "white", 10, "black");
+    for (var i = 1; i < 10; i++) {
+        drawLine((length * i), 0, (length * i), (length * 20), 1, "grey");
+    }
+    for (var i = 1; i < 20; i++) {
+        drawLine(0, (length * i), (length * 10), (length * i), 1, "grey");
+    }
+}
+
+function getRandom() {
+    //getRandomNumber(1, 7)
+    switch (arr[count]) {
+        case 1:
+            return new I;
+        case 2:
+            return new T;
+        case 3:
+            return new J;
+        case 4:
+            return new L;
+        case 5:
+            return new S;
+        case 6:
+            return new Z;
+        case 7:
+            return new O;
+    }
+}
+
+function getColor(num) {
     switch (num) {
         case 0:
             return "white"
@@ -156,34 +214,6 @@ function getColor(num){
     }
 }
 
-function drawBoard() {
-    drawRectangle(0, 0, 250, 500, "white", 0, "", 1, "black");
-    for (var i = 1; i < 10; i++) {
-        drawLine((length * i), 0, (length * i), (length * 20), 0, "grey");
-    }
-    for (var i = 1; i < 20; i++) {
-        drawLine(0, (length * i), (length * 10), (length * i), 0, "grey");
-    }
-}
-
-function getRandom() {
-    switch (getRandomNumber(1, 7)) {
-        case 1:
-            return new I;
-        case 2:
-            return new T;
-        case 3:
-            return new J;
-        case 4:
-            return new L;
-        case 5:
-            return new S;
-        case 6:
-            return new Z;
-        case 7:
-            return new O;
-    }
-}
 
 function onKeyDown(event) {
     var keyCode = event.keyCode;

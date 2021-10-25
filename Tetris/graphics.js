@@ -36,14 +36,13 @@ function drawTriangle() {
 
 function drawLine(x1, y1, x2, y2, width, color) {
     context.beginPath();
-    context.moveTo(x1, y1);
-    context.lineTo(x2, y2);
     context.lineWidth = width;
     context.strokeStyle = color;
+    context.moveTo(x1, y1);
+    context.lineTo(x2, y2);
     context.stroke();
     context.lineWidth = 1;
     context.strokeStyle = "black";
-
 }
 
 function drawText(x, y, sizeAndFont, color, text) {
