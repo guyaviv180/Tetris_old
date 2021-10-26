@@ -45,6 +45,66 @@ function update() {
     if (stop) { count++; changeField(); checkClear(); getPiece(); draw();}
 }
 
+function checkPosition(pos) {
+    for (var i = 0; i < 4; i++) {
+        if (pos.Block[i].y > (20 * length) ||
+            pos.Block[i].y < 0 ||
+            pos.Block[i].x > (10 * length) ||
+            pos.Block[i].y < 0) {
+            return false;
+
+        }
+        if ((field[((pos.Block[i].y) / 25)][((pos.Block[i].x) / 25)]) > 0) {
+            return false;
+        }
+    }
+    return true;
+}
+
+function movePiece(direction) {
+    var canMove = true
+    var type = piece.constructor;
+    var pos = new type;
+    switch (direction) {
+        case "right":
+            for (var i = 0; i < 4; i++) {
+                pos.Block[i] = piece.Block[i];
+                pos.Block[i].x += length;
+            }
+            if (checkPosition(pos)) {
+                for (var i = 0; i < 4; i++) {
+                    piece.Block[i].x += length;
+                }
+                canMove = false;
+            }
+    }
+    if (direction == "left") {
+        for (var i = 0; i < 4; i++) {
+            if (piece.Block[i].x < (0 + length)) {
+                canMove = false
+            }
+        }
+        if (canMove == true) {
+            for (var i = 0; i < 4; i++) {
+                piece.Block[i].x -= length;
+            }
+        }
+    }
+    if (direction == "down") {
+        for (var i = 0; i < 4; i++) {
+            if (piece.Block[i].y >= (length * 20)) {
+                canMove = false
+            }
+        }
+        if (canMove == true) {
+            for (var i = 0; i < 4; i++) {
+                piece.Block[i].y += length;
+            }
+        }
+    }
+    draw();
+}
+
 function checkClear() {
     var full = true;
     for (var i = 0; i < 20; i++) {
@@ -99,47 +159,6 @@ function getPiece() {
     stop = false;
 }
 
-function movePiece(direction) {
-    var canMove = true
-    if (direction == "right") {
-        for (var i = 0; i < 4; i++) {
-            if (piece.Block[i].x >= (250 - length)) {
-                canMove = false
-            }
-        }
-        if (canMove == true) {
-            for (var i = 0; i < 4; i++) {
-                piece.Block[i].x += length;
-            }
-        }
-    }
-    if (direction == "left") {
-        for (var i = 0; i < 4; i++) {
-            if (piece.Block[i].x < (0 + length)) {
-                canMove = false
-            }
-        }
-        if (canMove == true) {
-            for (var i = 0; i < 4; i++) {
-                piece.Block[i].x -= length;
-            }
-        }
-    }
-    if (direction == "down") {
-        for (var i = 0; i < 4; i++) {
-            if (piece.Block[i].y >= (length * 20)) {
-                canMove = false
-            }
-        }
-        if (canMove == true) {
-            for (var i = 0; i < 4; i++) {
-                piece.Block[i].y += length;
-            }
-        }
-    }
-    draw();
-}
-
 function dropPiece(piece) {
     for (var i = 0; i < 4; i++) {
         piece.Block[i].y += length;
@@ -159,7 +178,7 @@ function drawPieces() {
         }
     }
     for (var t = 0; t < 4; t++) {
-        drawRectangle(piece.Block[t].x, piece.Block[t].y, length, length, piece.color, 1, "black");
+        drawRectangle(piece.Block[t].x, piece.Block[t].y, length, length, piece.color, 1, "white");
     }
 }
 
