@@ -27,9 +27,9 @@ var field = [
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 ];
 var stop = false;
-var arr = [1, 1, 2, 5, 7, 2, 3, 4];
+var arr = [new I, new T, new j, new L, new S, new Z, new O];
 var count = 0;
-
+//run game
 window.onload = function () {
     canvas = document.getElementById("myCanvas");
     context = canvas.getContext("2d");
@@ -39,20 +39,23 @@ window.onload = function () {
     addEventListener("keydown", onKeyDown);
 }
 function update() {
-    dropPiece(piece);
     checkStop(piece);
+    if (stop) {
+        if (checkStop(piece)) {
+            count++; changeField(); checkClear(); getPiece(); draw();
+        }
+    }
+    dropPiece(piece);
     draw();
-    if (stop) { count++; changeField(); checkClear(); getPiece(); draw();}
 }
 
 function checkPosition(pos) {
     for (var i = 0; i < 4; i++) {
-        if (pos.Block[i].y > (20 * length) ||
+        if (pos.Block[i].y > (19 * length) ||
             pos.Block[i].y < 0 ||
-            pos.Block[i].x > (10 * length) ||
-            pos.Block[i].y < 0) {
+            pos.Block[i].x > (9 * length) ||
+            pos.Block[i].x < 0) {
             return false;
-
         }
         if ((field[((pos.Block[i].y) / 25)][((pos.Block[i].x) / 25)]) > 0) {
             return false;
@@ -62,47 +65,72 @@ function checkPosition(pos) {
 }
 
 function movePiece(direction) {
-    var canMove = true
     var type = piece.constructor;
     var pos = new type;
     switch (direction) {
         case "right":
             for (var i = 0; i < 4; i++) {
-                pos.Block[i] = piece.Block[i];
+                pos.Block[i].x = piece.Block[i].x;
+                pos.Block[i].y = piece.Block[i].y;
                 pos.Block[i].x += length;
             }
             if (checkPosition(pos)) {
                 for (var i = 0; i < 4; i++) {
                     piece.Block[i].x += length;
                 }
-                canMove = false;
             }
-    }
-    if (direction == "left") {
-        for (var i = 0; i < 4; i++) {
-            if (piece.Block[i].x < (0 + length)) {
-                canMove = false
-            }
-        }
-        if (canMove == true) {
+            break;
+        case "left":
             for (var i = 0; i < 4; i++) {
-                piece.Block[i].x -= length;
+                pos.Block[i].x = piece.Block[i].x;
+                pos.Block[i].y = piece.Block[i].y;
+                pos.Block[i].x -= length;
             }
-        }
-    }
-    if (direction == "down") {
-        for (var i = 0; i < 4; i++) {
-            if (piece.Block[i].y >= (length * 20)) {
-                canMove = false
+            if (checkPosition(pos)) {
+                for (var i = 0; i < 4; i++) {
+                    piece.Block[i].x -= length;
+                }
             }
-        }
-        if (canMove == true) {
+            break;
+        case "down":
             for (var i = 0; i < 4; i++) {
-                piece.Block[i].y += length;
+                pos.Block[i].x = piece.Block[i].x;
+                pos.Block[i].y = piece.Block[i].y;
+                pos.Block[i].y += length;
             }
-        }
+            if (checkPosition(pos)) {
+                for (var i = 0; i < 4; i++) {
+                    piece.Block[i].y += length;
+                }
+            }
+            break;
     }
+    checkStop(piece);
     draw();
+}
+
+function checkStop(piece) {
+    for (var i = 0; i < 4; i++) {
+        if (piece.Block[i].y >= (500 - length)) {
+            stop = true;
+            return true;
+        }
+    }
+    for (var i = 0; i < 4; i++) {
+        yUnder = ((piece.Block[i].y + 25) / 25)
+        xUnder = ((piece.Block[i].x) / 25)
+        if (field[yUnder][xUnder] > 0) {
+            stop = true;
+            return true
+        }
+    }
+    return false;
+}
+
+function dropPiece(piece) {
+    for (var i = 0; i < 4; i++) {
+        piece.Block[i].y += length;
+    }
 }
 
 function checkClear() {
@@ -139,32 +167,6 @@ function changeField() {
     }
 }
 
-function checkStop(piece) {
-    if (piece.Block[3].y == (500 - length)) {
-        stop = true;
-    }
-    else {
-        for (var i = 0; i < 4; i++) {
-            yUnder = ((piece.Block[i].y + 25) / 25)
-            xUnder = ((piece.Block[i].x) / 25)
-            if (field[yUnder][xUnder] >  0) {
-                stop = true;
-            }
-        }
-    }
-}
-
-function getPiece() {
-    piece = getRandom();
-    stop = false;
-}
-
-function dropPiece(piece) {
-    for (var i = 0; i < 4; i++) {
-        piece.Block[i].y += length;
-    }
-}
-
 function draw() {
     drawBoard();
     drawPieces()
@@ -192,8 +194,20 @@ function drawBoard() {
     }
 }
 
+function getPiece() {
+    piece = getRandom();
+    stop = false;
+}
+
 function getRandom() {
-    //getRandomNumber(1, 7)
+    rnd = getRandomNumber(1, 7);
+    var first;
+    var last = arr[rnd];
+    for (var i = 0; i < 6; i++) {
+        first = arr[i]
+        arr[i] = rnd;
+        arr[i + 1]
+    }
     switch (arr[count]) {
         case 1:
             return new I;
