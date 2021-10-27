@@ -27,7 +27,7 @@ var field = [
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 ];
 var stop = false;
-var arr = [new I, new T, new j, new L, new S, new Z, new O];
+var arr = [];
 var count = 0;
 //run game
 window.onload = function () {
@@ -195,35 +195,27 @@ function drawBoard() {
 }
 
 function getPiece() {
-    piece = getRandom();
+    if (count % 7 == 0) {
+        arr = getRandom();
+    }
+    piece = arr[(count % 7)];
+    count++;
     stop = false;
 }
 
 function getRandom() {
-    rnd = getRandomNumber(1, 7);
-    var first;
-    var last = arr[rnd];
-    for (var i = 0; i < 6; i++) {
-        first = arr[i]
-        arr[i] = rnd;
-        arr[i + 1]
+    pieces = [new I, new T, new J, new L, new S, new Z, new O];
+    var rnd1;
+    var rnd2;
+    var temp;
+    for (var i = 0; i < 7; i++) {
+        rnd1 = getRandomNumber(0, 6);
+        rnd2 = getRandomNumber(0, 6);
+        temp = pieces[rnd1];
+        pieces[rnd1] = pieces[rnd2];
+        pieces[rnd2] = temp;
     }
-    switch (arr[count]) {
-        case 1:
-            return new I;
-        case 2:
-            return new T;
-        case 3:
-            return new J;
-        case 4:
-            return new L;
-        case 5:
-            return new S;
-        case 6:
-            return new Z;
-        case 7:
-            return new O;
-    }
+    return pieces;
 }
 
 function getColor(num) {
