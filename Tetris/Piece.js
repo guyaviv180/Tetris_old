@@ -3,35 +3,37 @@
         this.x = x;
         this.y = y;
         this.length = 25;
-        this.space = length * 3;
     }
 }
 class Piece {
     constructor(color, index) {
         this.Block = new Block(4)
-        this.state1 = []
-        this.state2 = []
-        this.state3 = []
-        this.state4 = []
         this.color = color;
         this.index = index;
-        this.state = this.state1;
     }
-    build() {
-        var count = 0;
-        for (var i = 0; i < 4; i++) {
-            for (var j = 0; j < 4; j++) {
-                if (this.state[i][j] == 1) {
-                    this.Block[count].y = i * length;
-                    this.Block[count].x = j * length;
-                    count++;
+    move(direction) {
+        switch (direction) {
+            case "right":
+                for (var i = 0; i < 4; i++) {
+                    this.Block[i].x += length;
                 }
-            }
-        }
-        switch (state) {
-            case this.state1:
-                this.state = this.state2;
                 return;
+            case "left":
+                for (var i = 0; i < 4; i++) {
+                    this.Block[i].x -= length;
+                }
+                return;
+            case "down":
+                for (var i = 0; i < 4; i++) {
+                    this.Block[i].y += length;
+                }
+                return;
+        }
+    }
+    clone(piece) {
+        for (var i = 0; i < 4; i++) {
+            this.Block[i].x = piece.Block[i].x;
+            this.Block[i].y = piece.Block[i].y;
         }
     }
 }
@@ -39,35 +41,10 @@ class Piece {
 class I extends Piece {
     constructor() {
         super("cyan", 1);
-        this.Block[0] = new Block;
-        this.Block[1] = new Block;
-        this.Block[2] = new Block;
-        this.Block[3] = new Block;
-        this.state1 = [
-            [0, 0, 0, 0],
-            [1, 1, 1, 1],
-            [0, 0, 0, 0],
-            [0, 0, 0, 0]
-        ]
-        this.state2 = [
-            [0, 1, 0, 0],
-            [0, 1, 0, 0],
-            [0, 1, 0, 0],
-            [0, 1, 0, 0]
-        ]
-        this.state3 = [
-            [0, 0, 0, 0],
-            [0, 0, 0, 0],
-            [1, 1, 1, 1],
-            [0, 0, 0, 0]
-        ]
-        this.state4 = [
-            [0, 0, 1, 0],
-            [0, 0, 1, 0],
-            [0, 0, 1, 0],
-            [0, 0, 1, 0]
-        ]
-        this.build(this.state1);
+        this.Block[0] = new Block(length * 3, length * 0)
+        this.Block[1] = new Block(length * 4, length * 0)
+        this.Block[2] = new Block(length * 5, length * 0)
+        this.Block[3] = new Block(length * 6, length * 0)
     }
 }
 class T extends Piece {

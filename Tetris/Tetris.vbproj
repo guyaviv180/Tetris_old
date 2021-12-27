@@ -93,9 +93,11 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Game.js" />
+    <Content Include="Game2.js" />
     <Content Include="graphics.js" />
     <Content Include="Index.html" />
     <Content Include="Piece.js" />
+    <Content Include="Piece2.js" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>

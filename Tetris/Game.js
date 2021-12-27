@@ -1,6 +1,8 @@
-﻿const length = 25;
-var reletiveX = 3 * 25;
-var reletiveY = 0;
+﻿var rightArrow = false;
+var leftArrow = false;
+var upArrow = false;
+var downArrow = false;
+const length = 25;
 var piece;
 var field = [
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -25,9 +27,8 @@ var field = [
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 ];
 var stop = false;
-var arr = [];
+var arr = [new I, new T, new J, new L, new S, new Z, new O];
 var count = 0;
-//run game
 window.onload = function () {
     canvas = document.getElementById("myCanvas");
     context = canvas.getContext("2d");
@@ -45,30 +46,6 @@ function update() {
     }
     dropPiece(piece);
     draw();
-}
-
-function spin() {
-    piece.build(piece.state2);
-    for (var i = 0; i < 4; i++) {
-        piece.Block[i].x += reletiveX;
-        piece.Block[i].y += reletiveY;
-    }
-
-}
-
-function getPiece() {
-    if (count % 7 == 0) {
-        arr = getRandom();
-    }
-    reletiveX = 3 * length;
-    reletiveY = 0;
-    piece = new I;
-    for (var i = 0; i < 4; i++) {
-        piece.Block[i].x += 75;
-    }
-    //= arr[(count % 7)];
-    count++;
-    stop = false;
 }
 
 function checkPosition(pos) {
@@ -89,44 +66,24 @@ function checkPosition(pos) {
 function movePiece(direction) {
     var type = piece.constructor;
     var pos = new type;
+    pos.clone(piece)
     switch (direction) {
         case "right":
-            for (var i = 0; i < 4; i++) {
-                pos.Block[i].x = piece.Block[i].x;
-                pos.Block[i].y = piece.Block[i].y;
-                pos.Block[i].x += length;
-            }
+            pos.move("right");
             if (checkPosition(pos)) {
-                for (var i = 0; i < 4; i++) {
-                    piece.Block[i].x += length;
-                }
-                reletiveX += length;
+                piece.move("right");
             }
             break;
         case "left":
-            for (var i = 0; i < 4; i++) {
-                pos.Block[i].x = piece.Block[i].x;
-                pos.Block[i].y = piece.Block[i].y;
-                pos.Block[i].x -= length;
-            }
+            pos.move("left");
             if (checkPosition(pos)) {
-                for (var i = 0; i < 4; i++) {
-                    piece.Block[i].x -= length;
-                }
-                reletiveX -= length;
+                piece.move("left");
             }
             break;
         case "down":
-            for (var i = 0; i < 4; i++) {
-                pos.Block[i].x = piece.Block[i].x;
-                pos.Block[i].y = piece.Block[i].y;
-                pos.Block[i].y += length;
-            }
+            pos.move("down");
             if (checkPosition(pos)) {
-                for (var i = 0; i < 4; i++) {
-                    piece.Block[i].y += length;
-                }
-                reletiveY += length
+                piece.move("down");
             }
             break;
     }
@@ -156,7 +113,6 @@ function dropPiece(piece) {
     for (var i = 0; i < 4; i++) {
         piece.Block[i].y += length;
     }
-    reletiveY += length;
 }
 
 function checkClear() {
@@ -220,19 +176,36 @@ function drawBoard() {
     }
 }
 
+function getPiece() {
+    piece = getRandom();
+    stop = false;
+}
+
 function getRandom() {
-    pieces = [new I, new T, new J, new L, new S, new Z, new O];
-    var rnd1;
-    var rnd2;
-    var temp;
-    for (var i = 0; i < 7; i++) {
-        rnd1 = getRandomNumber(0, 6);
-        rnd2 = getRandomNumber(0, 6);
-        temp = pieces[rnd1];
-        pieces[rnd1] = pieces[rnd2];
-        pieces[rnd2] = temp;
+    rnd = getRandomNumber(1, 7);
+    var first;
+    var last = arr[rnd];
+    for (var i = 0; i < 6; i++) {
+        first = arr[i]
+        arr[i] = rnd;
+        arr[i + 1]
     }
-    return pieces;
+    switch (arr[count]) {
+        case 1:
+            return new I;
+        case 2:
+            return new T;
+        case 3:
+            return new J;
+        case 4:
+            return new L;
+        case 5:
+            return new S;
+        case 6:
+            return new Z;
+        case 7:
+            return new O;
+    }
 }
 
 function getColor(num) {
@@ -267,7 +240,7 @@ function onKeyDown(event) {
             movePiece("left");
             break;
         case 38:
-            spin();
+            upArrow = true;
             break;
         case 40:
             movePiece("down");
